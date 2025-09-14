@@ -53,9 +53,13 @@ export const authService = {
 
   async register(userData: RegisterData): Promise<LoginResponse> {
     try {
+      console.log('🔍 Enviando solicitud de registro a:', API_URL + '/auth/register');
+      console.log('🔍 Datos del usuario:', userData);
       const response = await api.post('/auth/register', userData);
+      console.log('✅ Respuesta del servidor:', response.data);
       return response.data;
     } catch (error: any) {
+      console.error('❌ Error en el registro:', error);
       if (error.response?.data?.errors) {
         const errorMessages = error.response.data.errors.map((err: any) => err.msg).join(', ');
         throw new Error(errorMessages);
