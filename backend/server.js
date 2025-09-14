@@ -15,7 +15,9 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: process.env.NODE_ENV === 'production' 
+      ? process.env.FRONTEND_URL || "https://your-app.vercel.app"
+      : "http://localhost:3000",
     methods: ["GET", "POST"]
   }
 });
@@ -23,7 +25,9 @@ const io = socketIo(server, {
 // Middleware
 app.use(helmet());
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin: process.env.NODE_ENV === 'production' 
+    ? process.env.FRONTEND_URL || "https://your-app.vercel.app"
+    : "http://localhost:3000",
   credentials: true
 }));
 app.use(express.json());

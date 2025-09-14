@@ -22,53 +22,54 @@
 3. Haz click en "Import"
 
 ### **Paso 4: Configurar el Proyecto**
-1. **Framework Preset**: Selecciona "Create React App"
+1. **Framework Preset**: Selecciona "Other" (ya que tenemos configuración personalizada)
 2. **Root Directory**: Deja vacío (Vercel detectará automáticamente)
 3. **Build and Output Settings**:
-   - Build Command: `cd frontend && npm run build`
+   - Build Command: `cd frontend && CI=false npm run build`
    - Output Directory: `frontend/build`
-   - Install Command: `cd frontend && npm install`
+   - Install Command: `cd frontend && npm install --legacy-peer-deps`
 
 ### **Paso 5: Variables de Entorno**
 En la sección "Environment Variables", agrega:
 
 ```
-REACT_APP_API_URL = https://tu-backend.railway.app
-REACT_APP_SOCKET_URL = https://tu-backend.railway.app
+NODE_ENV = production
+MONGODB_URI = tu_connection_string_mongodb_atlas
+JWT_SECRET = tu_secreto_super_seguro_aqui
+FRONTEND_URL = https://tu-app.vercel.app
 ```
 
-**⚠️ IMPORTANTE**: Reemplaza `tu-backend.railway.app` con la URL real de tu backend en Railway.
+**⚠️ IMPORTANTE**: 
+- Reemplaza `tu_connection_string_mongodb_atlas` con tu string de conexión de MongoDB Atlas
+- Reemplaza `tu_secreto_super_seguro_aqui` con un secreto JWT seguro
+- La URL del frontend se actualizará automáticamente después del primer despliegue
 
 ### **Paso 6: Desplegar**
 1. Haz click en "Deploy"
 2. Espera a que termine el build (2-3 minutos)
 3. ¡Tu app estará disponible en una URL como `https://chat-web-xxx.vercel.app`!
 
-## 🔧 Configuración del Backend (Railway)
+## 🔧 Configuración del Backend (Incluido en Vercel)
 
-### **Paso 1: Desplegar Backend en Railway**
-1. Ve a [railway.app](https://railway.app)
-2. Conecta tu GitHub
-3. "New Project" → "Deploy from GitHub repo"
-4. Selecciona tu repositorio ChatWeb
-5. Railway detectará automáticamente el backend
+### **Backend Desplegado Automáticamente**
+Con la nueva configuración, tanto el frontend como el backend se despliegan en Vercel:
+- **Frontend**: Se sirve como sitio estático
+- **Backend**: Se ejecuta como función serverless en `/api/*`
 
-### **Paso 2: Variables de Entorno en Railway**
+### **Variables de Entorno Necesarias**
+Asegúrate de configurar estas variables en Vercel:
 ```
 NODE_ENV=production
-PORT=5000
 MONGODB_URI=tu_connection_string_mongodb_atlas
 JWT_SECRET=tu_secreto_super_seguro_aqui
-JWT_EXPIRES_IN=7d
 FRONTEND_URL=https://tu-app.vercel.app
 ```
 
-### **Paso 3: Actualizar URLs Cruzadas**
-1. Una vez desplegado el backend, copia la URL de Railway
-2. Ve a Vercel → Tu proyecto → Settings → Environment Variables
-3. Actualiza `REACT_APP_API_URL` y `REACT_APP_SOCKET_URL` con la URL de Railway
-4. Ve a Railway → Variables → Actualiza `FRONTEND_URL` con la URL de Vercel
-5. Redespliega ambos servicios
+### **Configuración de MongoDB Atlas**
+1. Ve a [MongoDB Atlas](https://cloud.mongodb.com)
+2. Crea un cluster gratuito
+3. Obtén tu connection string
+4. Agrega la IP de Vercel a la whitelist (0.0.0.0/0 para desarrollo)
 
 ## 📱 Verificación Final
 
@@ -83,7 +84,7 @@ FRONTEND_URL=https://tu-app.vercel.app
 
 ### **URLs Finales:**
 - **Frontend**: `https://tu-app.vercel.app`
-- **Backend**: `https://tu-backend.railway.app`
+- **Backend API**: `https://tu-app.vercel.app/api/*`
 
 ## 🛠️ Solución de Problemas
 
@@ -92,16 +93,15 @@ FRONTEND_URL=https://tu-app.vercel.app
 - Asegúrate de que `package.json` esté en `frontend/`
 
 ### **Error: "API calls failing"**
-- Verifica que `REACT_APP_API_URL` esté correcta
-- Confirma que el backend esté funcionando en Railway
+- Verifica que las variables de entorno estén configuradas en Vercel
+- Confirma que MongoDB Atlas esté accesible desde Vercel
 
 ### **Error: "WebSocket connection failed"**
-- Verifica que `REACT_APP_SOCKET_URL` apunte al backend
-- Confirma que Railway permita conexiones WebSocket
+- Verifica que `FRONTEND_URL` esté configurada correctamente
+- Confirma que las rutas de API estén funcionando en `/api/*`
 
 ## 💰 Costos
-- **Vercel**: Gratis para proyectos personales
-- **Railway**: $5 crédito mensual gratis
+- **Vercel**: Gratis para proyectos personales (incluye frontend + backend)
 - **MongoDB Atlas**: 512MB gratis
 
 **Total: $0/mes** 🎉
