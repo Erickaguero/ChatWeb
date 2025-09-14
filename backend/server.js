@@ -16,7 +16,7 @@ const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
     origin: process.env.NODE_ENV === 'production' 
-      ? process.env.FRONTEND_URL || "https://your-app.vercel.app"
+      ? process.env.FRONTEND_URL || "https://chat-web-dun-five.vercel.app"
       : "http://localhost:3000",
     methods: ["GET", "POST"],
     credentials: true
@@ -27,7 +27,7 @@ const io = socketIo(server, {
 app.use(helmet());
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
-    ? process.env.FRONTEND_URL || "https://your-app.vercel.app"
+    ? process.env.FRONTEND_URL || "https://chat-web-dun-five.vercel.app"
     : "http://localhost:3000",
   credentials: true
 }));
