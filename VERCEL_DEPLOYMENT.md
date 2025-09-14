@@ -33,43 +33,49 @@
 En la sección "Environment Variables", agrega:
 
 ```
-NODE_ENV = production
-MONGODB_URI = tu_connection_string_mongodb_atlas
-JWT_SECRET = tu_secreto_super_seguro_aqui
-FRONTEND_URL = https://tu-app.vercel.app
+REACT_APP_API_URL = https://tu-backend.railway.app/api
+REACT_APP_SOCKET_URL = https://tu-backend.railway.app
 ```
 
 **⚠️ IMPORTANTE**: 
-- Reemplaza `tu_connection_string_mongodb_atlas` con tu string de conexión de MongoDB Atlas
-- Reemplaza `tu_secreto_super_seguro_aqui` con un secreto JWT seguro
-- La URL del frontend se actualizará automáticamente después del primer despliegue
+- Reemplaza `tu-backend.railway.app` con la URL real de tu backend en Railway
+- Estas URLs se configurarán después de desplegar el backend en Railway
 
 ### **Paso 6: Desplegar**
 1. Haz click en "Deploy"
 2. Espera a que termine el build (2-3 minutos)
 3. ¡Tu app estará disponible en una URL como `https://chat-web-xxx.vercel.app`!
 
-## 🔧 Configuración del Backend (Incluido en Vercel)
+## 🔧 Configuración del Backend (Railway)
 
-### **Backend Desplegado Automáticamente**
-Con la nueva configuración, tanto el frontend como el backend se despliegan en Vercel:
-- **Frontend**: Se sirve como sitio estático
-- **Backend**: Se ejecuta como función serverless en `/api/*`
+### **Paso 1: Desplegar Backend en Railway**
+1. Ve a [railway.app](https://railway.app)
+2. Conecta tu GitHub
+3. "New Project" → "Deploy from GitHub repo"
+4. Selecciona tu repositorio ChatWeb
+5. Railway detectará automáticamente el backend en la carpeta `backend/`
 
-### **Variables de Entorno Necesarias**
-Asegúrate de configurar estas variables en Vercel:
+### **Paso 2: Variables de Entorno en Railway**
 ```
 NODE_ENV=production
+PORT=5000
 MONGODB_URI=tu_connection_string_mongodb_atlas
 JWT_SECRET=tu_secreto_super_seguro_aqui
 FRONTEND_URL=https://tu-app.vercel.app
 ```
 
-### **Configuración de MongoDB Atlas**
+### **Paso 3: Configuración de MongoDB Atlas**
 1. Ve a [MongoDB Atlas](https://cloud.mongodb.com)
 2. Crea un cluster gratuito
 3. Obtén tu connection string
-4. Agrega la IP de Vercel a la whitelist (0.0.0.0/0 para desarrollo)
+4. Agrega la IP de Railway a la whitelist (0.0.0.0/0 para desarrollo)
+
+### **Paso 4: Actualizar URLs Cruzadas**
+1. Una vez desplegado el backend, copia la URL de Railway
+2. Ve a Vercel → Tu proyecto → Settings → Environment Variables
+3. Actualiza `REACT_APP_API_URL` y `REACT_APP_SOCKET_URL` con la URL de Railway
+4. Ve a Railway → Variables → Actualiza `FRONTEND_URL` con la URL de Vercel
+5. Redespliega ambos servicios
 
 ## 📱 Verificación Final
 
@@ -84,7 +90,7 @@ FRONTEND_URL=https://tu-app.vercel.app
 
 ### **URLs Finales:**
 - **Frontend**: `https://tu-app.vercel.app`
-- **Backend API**: `https://tu-app.vercel.app/api/*`
+- **Backend**: `https://tu-backend.railway.app`
 
 ## 🛠️ Solución de Problemas
 
@@ -93,15 +99,16 @@ FRONTEND_URL=https://tu-app.vercel.app
 - Asegúrate de que `package.json` esté en `frontend/`
 
 ### **Error: "API calls failing"**
-- Verifica que las variables de entorno estén configuradas en Vercel
-- Confirma que MongoDB Atlas esté accesible desde Vercel
+- Verifica que `REACT_APP_API_URL` esté configurada correctamente en Vercel
+- Confirma que el backend esté funcionando en Railway
 
 ### **Error: "WebSocket connection failed"**
-- Verifica que `FRONTEND_URL` esté configurada correctamente
-- Confirma que las rutas de API estén funcionando en `/api/*`
+- Verifica que `REACT_APP_SOCKET_URL` apunte al backend de Railway
+- Confirma que Railway permita conexiones WebSocket
 
 ## 💰 Costos
-- **Vercel**: Gratis para proyectos personales (incluye frontend + backend)
+- **Vercel**: Gratis para proyectos personales (solo frontend)
+- **Railway**: $5 crédito mensual gratis
 - **MongoDB Atlas**: 512MB gratis
 
 **Total: $0/mes** 🎉

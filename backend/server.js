@@ -18,7 +18,8 @@ const io = socketIo(server, {
     origin: process.env.NODE_ENV === 'production' 
       ? process.env.FRONTEND_URL || "https://your-app.vercel.app"
       : "http://localhost:3000",
-    methods: ["GET", "POST"]
+    methods: ["GET", "POST"],
+    credentials: true
   }
 });
 
