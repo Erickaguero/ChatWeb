@@ -43,10 +43,23 @@ router.post('/register', [
       return true;
     })
 ], async (req, res) => {
+  // Configurar timeout de 10 segundos
+  const timeout = setTimeout(() => {
+    if (!res.headersSent) {
+      res.status(408).json({
+        success: false,
+        message: 'Timeout: La solicitud tardó demasiado'
+      });
+    }
+  }, 10000);
+
   try {
+    console.log('🔍 Iniciando registro para:', req.body.email);
+    
     // Verificar errores de validación
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      clearTimeout(timeout);
       return res.status(400).json({
         success: false,
         message: 'Errores de validación',
@@ -82,6 +95,7 @@ router.post('/register', [
       { expiresIn: process.env.JWT_EXPIRE || '7d' }
     );
 
+    clearTimeout(timeout);
     res.status(201).json({
       success: true,
       message: 'Usuario registrado exitosamente',
@@ -90,6 +104,7 @@ router.post('/register', [
     });
 
   } catch (error) {
+    clearTimeout(timeout);
     console.error('❌ Error en registro:', error);
     console.error('❌ Error stack:', error.stack);
     res.status(500).json({
