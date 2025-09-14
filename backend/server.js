@@ -35,6 +35,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Conectar a MongoDB
+console.log('🔍 MONGODB_URI:', process.env.MONGODB_URI ? 'Configurada' : 'NO CONFIGURADA');
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/chatweb')
   .then(() => console.log('✅ Conectado a MongoDB'))
   .catch(err => console.error('❌ Error conectando a MongoDB:', err));
