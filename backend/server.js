@@ -40,8 +40,7 @@ console.log('🔍 Usando MongoDB URI hardcodeada');
 mongoose.connect(mongoURI, {
   serverSelectionTimeoutMS: 5000, // Timeout después de 5s
   socketTimeoutMS: 45000, // Cerrar sockets después de 45s
-  bufferCommands: false, // Deshabilitar buffering de mongoose
-  bufferMaxEntries: 0 // Deshabilitar buffering
+  bufferCommands: false // Deshabilitar buffering de mongoose
 })
   .then(() => console.log('✅ Conectado a MongoDB'))
   .catch(err => console.error('❌ Error conectando a MongoDB:', err));
